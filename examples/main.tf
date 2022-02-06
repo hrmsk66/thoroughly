@@ -9,11 +9,13 @@ terraform {
 
 provider "thoroughly" {}
 
-data "thoroughly_datacenters" "dc" {
+data "thoroughly_datacenters" "dc" {}
 
+locals {
+  shield_pops = { for d in data.thoroughly_datacenters.dc.datacenters : d.code => d.shield if d.shield != "" }
 }
 
 output "datacenters" {
-    value = data.thoroughly_datacenters.dc
+    value = local.shield_pops
 }
 
